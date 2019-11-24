@@ -64,8 +64,6 @@ Node.prototype.addNodeAtPosition = function(node, pos) {
   for (let index = 1; index < pos - 1; index++) {
     if (current && current.next != null) {
       current = current.next;
-    } else {
-      this.addNodeAtLast(node);
     }
   }
 
@@ -83,5 +81,6 @@ list.addValueAtLast(0);
 list.addValueAtLast(7);
 list.addValueAtFirst(20);
 list.addValueAtPosition(30, 3);
+list.addValueAtPosition(40, 10);
 
 list.traverse();
