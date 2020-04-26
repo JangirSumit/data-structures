@@ -1,78 +1,185 @@
-function Tree() {
-  this.root = null;
-}
-
-Tree.prototype.addValue = function(value) {
-  let node = new Node(value);
-  if (this.root == null) {
-    this.root = node;
-  } else {
-    this.root.addNode(node);
+class Node {
+  constructor(value, left = null, right = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right;
   }
-};
 
-Tree.prototype.traverse = function() {
-  this.root.visit();
-};
-
-Tree.prototype.search = function(value) {
-  this.root.search(value);
-};
-
-function Node(value) {
-  this.left = null;
-  this.right = null;
-  this.value = value;
-}
-
-Node.prototype.addNode = function(node) {
-  if (node.value < this.value) {
-    if (this.left == null) {
-      this.left = node;
+  addNode(node) {
+    if (this.value > node.value) {
+      if (this.left == null) {
+        this.left = node;
+      } else {
+        this.left.addNode(node);
+      }
     } else {
-      this.left.addNode(node);
-    }
-  } else if (node.value > this.value) {
-    if (this.right == null) {
-      this.right = node;
-    } else {
-      this.right.addNode(node);
+      if (this.right == null) {
+        this.right = node;
+      } else {
+        this.right.addNode(node);
+      }
     }
   }
-};
 
-Node.prototype.visit = function() {
-  if (this.left != null) {
-    this.left.visit();
+  inOrderTraverse() {
+    if (this.left) {
+      this.left.inOrderTraverse();
+    }
+    console.log(this.value);
+    if (this.right) {
+      this.right.inOrderTraverse();
+    }
   }
-  console.log(this.value);
-  if (this.right != null) {
-    this.right.visit();
+
+  preOrderTraverse() {
+    console.log(this.value);
+    if (this.left) {
+      this.left.preOrderTraverse();
+    }
+    if (this.right) {
+      this.right.preOrderTraverse();
+    }
   }
-};
 
-Node.prototype.search = function(value) {
-  if (this.value == value) {
-    console.log("Found");
-    return;
+  postOrderTraverse() {
+    if (this.left) {
+      this.left.postOrderTraverse();
+    }
+    if (this.right) {
+      this.right.postOrderTraverse();
+    }
+    console.log(this.value);
   }
-  if (this.value > value && this.left != null) {
-    this.left.search(value);
-  } else if (this.value < value && this.right != null) {
-    this.right.search(value);
-  } else {
-    console.log("Not Found");
+}
+
+class BST {
+  constructor() {
+    this.root = null;
   }
-};
 
-var tree;
+  add(value) {
+    const node = new Node(value);
 
-tree = new Tree();
-tree.addValue(5);
-tree.addValue(3);
-tree.addValue(10);
-tree.addValue(2);
-tree.addValue(1);
+    if (this.root === null) {
+      this.root = node;
+    } else {
+      this.root.addNode(node);
+    }
+  }
 
-tree.traverse();
-tree.search(6);
+  inOrderTraverse() {
+    if (this.root) {
+      this.root.inOrderTraverse();
+    }
+  }
+
+  preOrderTraverse() {
+    if (this.root) {
+      this.root.preOrderTraverse();
+    }
+  }
+
+  postOrderTraverse() {
+    if (this.root) {
+      this.root.postOrderTraverse();
+    }
+  }
+
+  traverseBFS() {
+    let res = [];
+    if (this.root) {
+      let q = [this.root];
+
+      while (q.length) {
+        let current = q.shift();
+        res.push(current.value);
+
+        if (current && current.left) {
+          q.push(current.left);
+        }
+
+        if (current && current.right) {
+          q.push(current.right);
+        }
+      }
+    }
+
+    return res.join(", ");
+  }
+
+  getMin() {
+    let min;
+    if (this.root) {
+      let current = this.root;
+
+      while (current.left) {
+        current = current.left;
+      }
+
+      min = current.value;
+    }
+    return min;
+  }
+
+  getMax() {
+    let min;
+    if (this.root) {
+      let current = this.root;
+
+      while (current.right) {
+        current = current.right;
+      }
+
+      min = current.value;
+    }
+    return min;
+  }
+
+  getHeight(node = this.root) {
+    if (node) {
+      let leftHeight = node.left ? this.getHeight(node.left) : 0;
+      let rightHeight = node.right ? this.getHeight(node.right) : 0;
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    } else {
+      return -1;
+    }
+  }
+}
+
+const bst = new BST();
+bst.add(15);
+bst.add(25);
+bst.add(10);
+bst.add(7);
+bst.add(22);
+bst.add(17);
+bst.add(13);
+bst.add(5);
+bst.add(9);
+bst.add(27);
+
+console.log("In Order Traversal");
+bst.inOrderTraverse();
+console.log(" ");
+
+console.log("Pre Order Traversal");
+bst.preOrderTraverse();
+console.log(" ");
+
+console.log("Post Order Traversal");
+bst.postOrderTraverse();
+console.log(" ");
+
+console.log(`Min value in tree\n${bst.getMin()}`);
+console.log(" ");
+
+console.log(`Max value in tree\n${bst.getMax()}`);
+console.log(" ");
+
+console.log(`BFS traversal\n${bst.traverseBFS()}`);
+console.log(" ");
+
+console.log(`Height of tree\n${bst.getHeight()}`);
+
+console.log(JSON.stringify(bst));
