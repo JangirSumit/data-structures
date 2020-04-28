@@ -37,6 +37,26 @@ List.prototype.traverse = function () {
   this.root.traverse();
 };
 
+List.prototype.hasLoop = function () {
+  let p1, p2;
+
+  p1 = this.root;
+  p2 = this.root;
+  let hasLoop = false;
+
+  while (p2 && p2.next && p2.next.next) {
+    p1 = p1.next;
+    p2 = p2.next.next;
+
+    if (p1 === p2) {
+      hasLoop = true;
+      break;
+    }
+  }
+
+  return hasLoop;
+};
+
 function Node(value) {
   this.value = value;
   this.next = null;
@@ -83,4 +103,10 @@ list.addValueAtFirst(20);
 list.addValueAtPosition(30, 3);
 list.addValueAtPosition(40, 10);
 
-list.traverse();
+console.log(JSON.stringify(list));
+
+//list.root.next.next.next.next = list.root.next.next;
+
+console.log(`${list.hasLoop()}`);
+
+//list.traverse();

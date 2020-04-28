@@ -180,6 +180,6 @@ console.log(" ");
 console.log(`BFS traversal\n${bst.traverseBFS()}`);
 console.log(" ");
 
-console.log(`Height of tree\n${bst.getHeight()}`);
+console.log(`Height of tree\n${bst.getHeight()}\n`);
 
 console.log(JSON.stringify(bst));
